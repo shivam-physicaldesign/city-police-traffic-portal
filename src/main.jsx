@@ -8,6 +8,14 @@ import {
   Eye, EyeOff, ClipboardList, MapPinned, LockKeyhole
 } from 'lucide-react';
 import './styles.css';
+const API_BASE = import.meta.env.VITE_API_URL || '';
+const originalFetch = window.fetch.bind(window);
+window.fetch = (url, options = {}) => {
+  if (typeof url === 'string' && url.startsWith('/api')) {
+    return originalFetch(API_BASE + url, { credentials: 'include', ...options });
+  }
+  return originalFetch(url, options);
+};
 
 const roles = [
   { name: 'Administrator', id: 'admin.demo', password: 'AdminDemo@123', icon: ShieldCheck, detail: 'System-wide oversight, user access, reports and configuration.' },
